@@ -38,6 +38,7 @@ const Products = {
     requests.get('/api/Product/GetProduct'),
 };
 
+
 const agent = {
   Products,
 };

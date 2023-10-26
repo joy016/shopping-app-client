@@ -1,64 +1,35 @@
 'use client';
+import { Box } from '@mui/material';
+
+import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import {
-  Avatar,
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  CardMedia,
-  Grid,
-  Typography,
-} from '@mui/material';
-import { red } from '@mui/material/colors';
-import { useEffect, useState } from 'react';
-import agent from '../api/agent';
+  fetchProducts,
+  productSelector,
+} from '../../../store/slices/productSlice';
+import ProductCard from './components/ProductCard';
+import SearchProduct from './components/SearchProduct';
+import ProductSort from './components/ProductSort';
 
 export default function Product() {
-  const [products, setProducts] = useState([]);
+  const products = useAppSelector(productSelector.selectAll);
+  const { productsLoaded } = useAppSelector((state) => state.products);
+  const dispatch = useAppDispatch();
 
-
-
+  useEffect(() => {
+    if (!productsLoaded) dispatch(fetchProducts());
+  }, [dispatch, productsLoaded]);
 
   return (
-    <Box sx={{ width: '60%' }}>
-      <Grid container spacing={0}>
-        <Grid item xs={4}>
-          <Card sx={{ width: 250, padding: '0 10px' }}>
-            <CardHeader
-              avatar={
-                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                  R
-                </Avatar>
-              }
-              title="Womens Pointed Toe Ankle Boots"
-            />
-            <CardMedia
-              sx={{ height: 140 }}
-              image="https://m.media-amazon.com/images/I/61ndjxi8POL._AC_UX679_.jpg"
-              title="green iguana"
-            />
+    <>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <SearchProduct />
+        <ProductSort />
+      </Box>
 
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                $300
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                NetCore/Boards
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Button variant="text" size="small" sx={{ fontWeight: 'bold' }}>
-                ADD TO CART
-              </Button>
-              <Button variant="text" size="small" sx={{ fontWeight: 'bold' }}>
-                VIEW
-              </Button>
-            </CardActions>
-          </Card>
-        </Grid>
-      </Grid>
-    </Box>
+      <Box sx={{ width: '60%' }}>
+        <ProductCard products={products} />
+      </Box>
+    </>
   );
 }

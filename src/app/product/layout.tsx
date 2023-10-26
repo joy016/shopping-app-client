@@ -17,7 +17,6 @@ export default function Layout(props: {
           padding: '2rem 0',
         }}
       >
-        <h1>filter</h1>
         {props.children}
       </Box>
     </>

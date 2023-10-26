@@ -6,28 +6,34 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from '@reduxjs/toolkit';
-import axios from 'axios';
 import { RootState } from '../store';
+import { Product } from '@/app/types/product';
 
 interface ProductState {
-  productParams: [];
+  productsLoaded: boolean;
+  productParams: Product[];
   loading: string;
 }
 
-const productAdapter = createEntityAdapter<ProductFormValues>();
+const productAdapter = createEntityAdapter<Product>();
 
-export const fetchProducts = createAsyncThunk(
+export const fetchProducts = createAsyncThunk<Product[]>(
   'products/fetchProducts',
-  async () => {
-    const response = await agent.Products.getProducts();
-    const data = await response.json();
-    return data;
+  async (_, thunkAPI) => {
+    try {
+      const response = await agent.Products.getProducts();
+      // const data = await response.json();
+      return response;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue({ error: error.data });
+    }
   }
 );
 
 export const productsSlice = createSlice({
   name: 'products',
   initialState: productAdapter.getInitialState<ProductState>({
+    productsLoaded: false,
     productParams: [],
     loading: '',
   }),
@@ -38,8 +44,9 @@ export const productsSlice = createSlice({
         state.loading = 'pending';
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
+        productAdapter.setAll(state, action.payload);
         state.loading = 'fulfilled';
-        state.entities = action.payload; // Assuming your API response is an array of products
+        state.productsLoaded = true;
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.loading = 'rejected';

@@ -3,8 +3,9 @@ import type { Metadata } from 'next';
 import { Roboto } from 'next/font/google';
 import Header from './component/Header';
 import AddProduct from './component/AddComponent';
-import { Provider } from 'react-redux';
 import { store } from '../../store/store';
+import { Provider } from 'react-redux';
+import { Providers } from './layout/Provider';
 
 const roboto = Roboto({
   weight: ['400', '700', '900'],
@@ -19,30 +20,24 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  productcard,
-  productfunctions,
 }: {
   children: React.ReactNode;
-  productcard: React.ReactNode;
-  productfunctions: React.ReactNode;
 }) {
   return (
     <html lang="en" className={roboto.className}>
-      <Provider store={store}>
-        <body
-          style={{
-            position: 'relative',
-            height: '100vh',
-            backgroundColor: '#e1e1ea',
-          }}
-        >
+      <body
+        style={{
+          position: 'relative',
+          height: '100vh',
+          backgroundColor: '#e1e1ea',
+        }}
+      >
+        <Providers>
           <Header />
           {children}
-          {productcard}
-          {productfunctions}
           <AddProduct />
-        </body>
-      </Provider>
+        </Providers>
+      </body>
     </html>
   );
 }
