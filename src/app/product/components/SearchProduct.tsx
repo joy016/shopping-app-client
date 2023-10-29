@@ -1,5 +1,9 @@
-import { TextField } from "@mui/material";
+import { Paper, TextField } from '@mui/material';
 
 export default function SearchProduct() {
-  return <TextField id="outlined-search" label="Search field" type="search" />;
+  return (
+    <Paper elevation={2}>
+      <TextField id="outlined-search" label="Search products" type="search" />
+    </Paper>
+  );
 }

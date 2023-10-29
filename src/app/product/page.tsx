@@ -10,6 +10,7 @@ import {
 import ProductCard from './components/ProductCard';
 import SearchProduct from './components/SearchProduct';
 import ProductSort from './components/ProductSort';
+import ProductFilter from './components/ProductFilter';
 
 export default function Product() {
   const products = useAppSelector(productSelector.selectAll);
@@ -25,6 +26,7 @@ export default function Product() {
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         <SearchProduct />
         <ProductSort />
+        <ProductFilter />
       </Box>
 
       <Box sx={{ width: '60%' }}>

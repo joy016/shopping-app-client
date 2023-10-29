@@ -5,32 +5,28 @@ import {
   FormControlLabel,
   Radio,
   Paper,
+  Checkbox,
+  FormGroup,
 } from '@mui/material';
+import { PRODUCT_PRICE_SORT } from '../../../../constants/product';
 
 export default function ProductSort() {
   return (
     <Paper elevation={2} sx={{ padding: '20px' }}>
       <RadioGroup
         aria-labelledby="demo-radio-buttons-group-label"
-        defaultValue="female"
+        defaultValue="alphabetical"
         name="radio-buttons-group"
       >
-        <FormControlLabel
-          value="female"
-          control={<Radio />}
-          label="Alphabetical"
-        />
-        <FormControlLabel
-          value="male"
-          control={<Radio />}
-          label="Price - High to low"
-        />
-        <FormControlLabel
-          value="other"
-          control={<Radio />}
-          label="Price - Low to high"
-        />
+        {PRODUCT_PRICE_SORT.map((productPrice) => (
+          <FormControlLabel
+            value={productPrice.value}
+            control={<Radio />}
+            label={productPrice.label}
+          />
+        ))}
       </RadioGroup>
+
     </Paper>
   );
 }

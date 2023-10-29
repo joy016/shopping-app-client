@@ -21,11 +21,12 @@ export default function Header() {
         <Link href="/">Products</Link>
         <Link href="#">About</Link>
         <Link href="#">Contacts</Link>
+        <Link href="/inventory">Product Inventory</Link>
       </Stack>
       <Stack spacing={2} direction="row">
         <Link href="#">
           <Badge badgeContent={4} color="primary">
-            <ShoppingCartIcon sx={{color: '#ffffff'}} />
+            <ShoppingCartIcon sx={{ color: '#ffffff' }} />
           </Badge>
         </Link>
         <Link href="/login">Login</Link>
