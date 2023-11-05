@@ -1,13 +1,12 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Roboto } from 'next/font/google';
-import Header from './component/Header';
-import AddProduct from './component/AddComponent';
+import { Poppins, Roboto } from 'next/font/google';
 import { store } from '../../store/store';
 import { Provider } from 'react-redux';
 import { Providers } from './layout/Provider';
+import Header from '@/component/Header';
 
-const roboto = Roboto({
+const poppins = Poppins({
   weight: ['400', '700', '900'],
   subsets: ['latin'],
   display: 'swap',
@@ -24,18 +23,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={roboto.className}>
-      <body
-        style={{
-          position: 'relative',
-          height: '100vh',
-          backgroundColor: '#e1e1ea',
-        }}
-      >
+    <html lang="en" className={poppins.className}>
+      <body>
         <Providers>
           <Header />
           {children}
-          <AddProduct />
         </Providers>
       </body>
     </html>

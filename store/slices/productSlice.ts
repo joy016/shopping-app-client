@@ -13,6 +13,7 @@ interface ProductState {
   productsLoaded: boolean;
   productParams: Product[];
   loading: string;
+  counterCart: number;
 }
 
 const productAdapter = createEntityAdapter<Product>();
@@ -36,8 +37,13 @@ export const productsSlice = createSlice({
     productsLoaded: false,
     productParams: [],
     loading: '',
+    counterCart: 0,
   }),
-  reducers: {},
+  reducers: {
+    addToCart: (state) => {
+      state.counterCart += 1;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchProducts.pending, (state) => {
@@ -53,6 +59,8 @@ export const productsSlice = createSlice({
       });
   },
 });
+
+export const { addToCart } = productsSlice.actions;
 
 export const productSelector = productAdapter.getSelectors(
   (state: RootState) => state.products

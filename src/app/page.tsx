@@ -16,7 +16,7 @@ export default function Home() {
   useEffect(() => {
     initApp();
     if (user.length === 0) {
-      router.push('/product');
+      router.push('/home');
     } else {
       router.push('/login');
     }
