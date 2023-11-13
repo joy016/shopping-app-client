@@ -10,7 +10,6 @@ import {
   Typography,
 } from '@mui/material';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
-import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import Link from 'next/link';
 import { SwiperSlide, Swiper } from 'swiper/react';
@@ -45,7 +44,7 @@ export default function Banner() {
           Our newest styles are here to help you <br />
           <span>look your best.</span>
         </Typography>
-        <Link href="#">
+        <Link href="/product">
           <Button variant="outlined" color="secondary">
             Explore products
           </Button>
@@ -72,35 +71,41 @@ export default function Banner() {
           {HIGHLIGHTS_PRODUCT.map((product) => (
             <SwiperSlide key={product.key} style={{ padding: '1rem 1rem' }}>
               <Link href={`/product/single-product/${product.key}`}>
-                {product.productName}
-              </Link>
-              <CardMedia
-                sx={{ height: 350 }}
-                image={product.imageSrc}
-                title={product.productName}
-              />
-              <Typography>{product.productName}</Typography>
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
-                <Typography>₱{product.productPrice}</Typography>
-                <Box>
-                  <IconButton aria-label="heart" color="secondary">
-                    <FavoriteBorderOutlinedIcon />
-                  </IconButton>
-                  <IconButton
-                    aria-label="cart"
-                    color="secondary"
-                    onClick={() => dispatch(addToCart())}
-                  >
-                    <ShoppingBagOutlinedIcon />
-                  </IconButton>
+                <CardMedia
+                  sx={{
+                    height: 350,
+                    boxShadow: '0 0 0 0 violet',
+                    transition: 'box-shadow 0.3s',
+                    '&:hover': {
+                      boxShadow: '0 0 8px 2px violet',
+                    },
+                  }}
+                  image={product.imageSrc}
+                  title={product.productName}
+                />
+                <Typography>{product.productName}</Typography>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Typography>₱{product.productPrice}</Typography>
+                  <Box>
+                    <IconButton aria-label="heart" color="secondary">
+                      <FavoriteBorderOutlinedIcon />
+                    </IconButton>
+                    <IconButton
+                      aria-label="cart"
+                      color="secondary"
+                      onClick={() => dispatch(addToCart())}
+                    >
+                      <ShoppingBagOutlinedIcon />
+                    </IconButton>
+                  </Box>
                 </Box>
-              </Box>
+              </Link>
             </SwiperSlide>
           ))}
         </Swiper>

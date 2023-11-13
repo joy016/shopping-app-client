@@ -1,5 +1,4 @@
 const PRODUCT_PRICE_SORT = [
-  { value: 'alphabetical', label: 'Alphabetical' },
   { value: 'highToLow', label: 'Price - High to low' },
   { value: 'lowToHigh', label: 'Price - Low to high' },
 ];
@@ -57,6 +56,7 @@ const HIGHLIGHTS_PRODUCT = [
     productPrice: '799',
   },
 ];
+
 
 export {
   PRODUCT_PRICE_SORT,

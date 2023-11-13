@@ -1,54 +1,113 @@
 'use client';
 
-import { Badge, Box, Paper, Stack } from '@mui/material';
+import {
+  AppBar,
+  Badge,
+  Box,
+  Container,
+  CssBaseline,
+  Fab,
+  Fade,
+  Paper,
+  Stack,
+  Toolbar,
+  Typography,
+  useMediaQuery,
+  useScrollTrigger,
+  useTheme,
+} from '@mui/material';
 import Link from 'next/link';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+
+import { useAppSelector } from '../../store/hooks';
+import FixedHeader from './header/FixedHeader';
+import ResponsiveHeader from './header/ResponsiveHeader';
+
+//icons
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
-import { useAppSelector } from '../../store/hooks';
+import AccountsHeader from './header/AccountsHeader';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
-export default function Header() {
+interface Props {
+  window?: () => Window;
+  children: React.ReactElement;
+}
+
+function ScrollTop(props: Props) {
+  const { children, window } = props;
+  const trigger = useScrollTrigger({
+    target: window ? window() : undefined,
+    disableHysteresis: true,
+    threshold: 100,
+  });
+
+  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const anchor = (
+      (event.target as HTMLDivElement).ownerDocument || document
+    ).querySelector('#back-to-top-anchor');
+
+    if (anchor) {
+      anchor.scrollIntoView({
+        block: 'center',
+      });
+    }
+  };
+
+  return (
+    <Fade in={trigger}>
+      <Box
+        onClick={handleClick}
+        role="presentation"
+        sx={{ position: 'fixed', bottom: 16, right: 16 }}
+      >
+        {children}
+      </Box>
+    </Fade>
+  );
+}
+
+export default function Header(props: Props) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
   const counterCart = useAppSelector((state) => state.products.counterCart);
   return (
-    <Paper
-      square
-      elevation={3}
-      sx={{
-        padding: '2rem 2rem',
-        display: 'flex',
-        justifyContent: 'space-between',
-        backgroundColor: '#FFFFFF',
-        width: '96%',
-        position: 'fixed',
-        top: '0',
-        zIndex: '100',
-      }}
-    >
-      <Link href="#">Test</Link>
-      <Stack spacing={2} direction="row">
-        <Link href="/">HOME</Link>
-        <Link href="/shop">SHOP</Link>
-        <Link href="#">CONTACTS</Link>
-        <Link href="#">BLOGS</Link>
-        <Link href="/inventory">INVENTORY</Link>
-      </Stack>
-      <Stack spacing={2} direction="row">
-        <Link href="#">
-          <Badge badgeContent={4} color="secondary">
-            <FavoriteBorderOutlinedIcon />
-          </Badge>
-        </Link>
-        <Link href="/cart">
-          <Badge
-            badgeContent={counterCart === 0 ? '0' : counterCart}
-            color="secondary"
-          >
-            <ShoppingBagOutlinedIcon />
-          </Badge>
-        </Link>
-        <Link href="/login">LOGIN</Link>
-        <Link href="/register">REGISTER</Link>
-      </Stack>
-    </Paper>
+    <>
+      <CssBaseline />
+      <AppBar color="secondary">
+        <Toolbar
+          variant="dense"
+          sx={{
+            padding: '1.5rem 0.5rem',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            gap: '1rem',
+            // width: { xs: '100%', sm: '90%', lg: '100%' },
+          }}
+        >
+          {isMobile ? <ResponsiveHeader /> : <FixedHeader />}
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Link href="#">
+              <Badge badgeContent={4}>
+                <FavoriteBorderOutlinedIcon />
+              </Badge>
+            </Link>
+            <Link href="/cart">
+              <Badge badgeContent={counterCart === 0 ? '0' : counterCart}>
+                <ShoppingBagOutlinedIcon />
+              </Badge>
+            </Link>
+            <AccountsHeader />
+          </Stack>
+        </Toolbar>
+      </AppBar>
+      <Toolbar id="back-to-top-anchor" />
+      <ScrollTop {...props}>
+        <Fab size="small" aria-label="scroll back to top" color="secondary">
+          <KeyboardArrowUpIcon />
+        </Fab>
+      </ScrollTop>
+    </>
   );
 }

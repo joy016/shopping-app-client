@@ -1,59 +1,79 @@
-import { ProductFormValues } from '@/app/models/Product';
 import { Product } from '@/app/types/product';
 import {
-  Avatar,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
+  Box,
   CardMedia,
   Grid,
+  IconButton,
+  Link,
+  Stack,
   Typography,
 } from '@mui/material';
-import { red } from '@mui/material/colors';
+import { addToCart } from '../../../../store/slices/productSlice';
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
+import { useAppDispatch } from '../../../../store/hooks';
 
 interface Props {
   products: Product[];
 }
 
 export default function ProductCard({ products }: Props) {
+  const dispatch = useAppDispatch();
   return (
-    <Grid container spacing={2}>
+    <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 3 }}>
       {products.map((product) => (
-        <Grid item xs={4}>
-          <Card sx={{ width: 250, padding: '0 10px' }}>
-            <CardHeader
-              avatar={
-                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                  R
-                </Avatar>
-              }
-              title={product.name}
-            />
-            <CardMedia
-              sx={{ height: 140 }}
-              image="https://m.media-amazon.com/images/I/61ndjxi8POL._AC_UX679_.jpg"
-              title={product.name}
-            />
+        <Grid item xs={6} sm={4} md={6} lg={4} key={product.id}>
+          <Box
+            sx={{
+              width: { xs: '10rem', sm: '10rem', md: '16rem' },
+              margin: '0 auto',
+            }}
+          >
+            <Link
+              href={`/product/single-product/${product.id}`}
+              style={{ textDecoration: 'none', color: 'inherit' }}
+            >
+              <CardMedia
+                sx={{
+                  height: { xs: 150, sm: 200, lg: 350 },
+                  boxShadow: '0 0 0 0 violet',
+                  transition: 'box-shadow 0.3s',
+                  '&:hover': {
+                    boxShadow: '0 0 8px 2px violet',
+                  },
+                }}
+                image="/images/latest/banner1.webp"
+                title={product.name}
+              />
 
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                {`$${product.price}`}
+              <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                {product.name}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {product.brand}
+            </Link>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <Typography sx={{ fontSize: { xs: '13px', sm: '15px' } }}>
+                ₱{product.price}
               </Typography>
-            </CardContent>
-            <CardActions>
-              <Button variant="text" size="small" sx={{ fontWeight: 'bold' }}>
-                ADD TO CART
-              </Button>
-              <Button variant="text" size="small" sx={{ fontWeight: 'bold' }}>
-                VIEW
-              </Button>
-            </CardActions>
-          </Card>
+              <Stack direction="row">
+                <IconButton aria-label="heart" color="secondary">
+                  <FavoriteBorderOutlinedIcon />
+                </IconButton>
+                <IconButton
+                  aria-label="cart"
+                  color="secondary"
+                  onClick={() => dispatch(addToCart())}
+                >
+                  <ShoppingBagOutlinedIcon />
+                </IconButton>
+              </Stack>
+            </Box>
+          </Box>
         </Grid>
       ))}
     </Grid>

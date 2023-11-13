@@ -1,5 +1,5 @@
 'use client';
-import { Box } from '@mui/material';
+import { Box, Container, Grid } from '@mui/material';
 
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
@@ -22,16 +22,32 @@ export default function Product() {
   }, [dispatch, productsLoaded]);
 
   return (
-    <>
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        <SearchProduct />
-        <ProductSort />
-        <ProductFilter />
-      </Box>
-
-      <Box sx={{ width: '60%' }}>
-        <ProductCard products={products} />
-      </Box>
-    </>
+    <div className="pageContainer">
+      <Container
+        fixed
+        sx={{
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row', lg: 'row' },
+          justifyContent: 'center',
+          gap: '1.5rem',
+          padding: { xs: '2rem 2rem', md: '2rem 1rem' },
+        }}
+      >
+        <Box
+          sx={{
+            display: { xs: 'flex', md: 'flex' },
+            flexDirection: 'column',
+            gap: '1rem',
+          }}
+        >
+          <SearchProduct />
+          <ProductSort />
+          <ProductFilter />
+        </Box>
+        <Box>
+          <ProductCard products={products} />
+        </Box>
+      </Container>
+    </div>
   );
 }
