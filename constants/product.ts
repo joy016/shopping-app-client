@@ -27,7 +27,8 @@ const PRODUCT_COLOR = [
 const HIGHLIGHTS_PRODUCT = [
   {
     key: '1',
-    imageSrc: '/images/latest/banner1.webp',
+    // imageSrc: '/images/latest/banner1.webp',
+    imageSrc: '/images/products/boot-redis1.png',
     productName: 'T-Shirt North America',
     productPrice: '350',
   },
@@ -56,7 +57,6 @@ const HIGHLIGHTS_PRODUCT = [
     productPrice: '799',
   },
 ];
-
 
 export {
   PRODUCT_PRICE_SORT,

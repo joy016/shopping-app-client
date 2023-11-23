@@ -19,11 +19,20 @@ import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/pagination';
 import { HIGHLIGHTS_PRODUCT } from '../../../../constants/product';
-import { useAppDispatch } from '../../../../store/hooks';
-import { addToCart } from '../../../../store/slices/productSlice';
+import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
+import { addToCart, fetchHighlightsProduct, productSelector } from '../../../../store/slices/productSlice';
+import { useEffect } from 'react';
 
 export default function Banner() {
+
+  const products = useAppSelector(productSelector.selectAll);
+  const { highlightProductsLoaded } = useAppSelector((state) => state.products);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (!highlightProductsLoaded) dispatch(fetchHighlightsProduct());
+  }, [dispatch, highlightProductsLoaded]);
+  
   return (
     <>
       <Box
@@ -39,13 +48,27 @@ export default function Banner() {
         </Typography>
         <Typography
           variant="h4"
-          sx={{ lineHeight: '50px', marginBottom: '20px' }}
+          sx={{
+            lineHeight: '50px',
+            marginBottom: '20px',
+            fontSize: { xs: '1.2rem', md: '1.5rem', lg: '2rem' },
+          }}
         >
           Our newest styles are here to help you <br />
           <span>look your best.</span>
         </Typography>
         <Link href="/product">
-          <Button variant="outlined" color="secondary">
+          <Button
+            variant="outlined"
+            color="secondary"
+            sx={{
+              width: 'auto',
+              fontSize: {
+                xs: 'small',
+                sm: 'medium',
+              },
+            }}
+          >
             Explore products
           </Button>
         </Link>
@@ -53,14 +76,29 @@ export default function Banner() {
 
       <Container
         sx={{
-          maxWidth: '45rem',
+          width: { xs: '30rem', md: '60rem', lg: '70rem' },
           display: 'flex',
           justifyContent: 'center',
         }}
       >
         <Swiper
-          slidesPerView={3}
-          spaceBetween={20}
+          breakpoints={{
+            500: {
+              slidesPerView: 3,
+              spaceBetween: 1,
+            },
+            600: {
+              slidesPerView: 2,
+            },
+            768: {
+              width: 768,
+              slidesPerView: 3,
+            },
+            1024: {
+              slidesPerView: 3,
+              spaceBetween: 10,
+            },
+          }}
           freeMode={true}
           pagination={{
             clickable: true,
@@ -68,22 +106,22 @@ export default function Banner() {
           modules={[FreeMode, Pagination]}
           className="mySwiper"
         >
-          {HIGHLIGHTS_PRODUCT.map((product) => (
-            <SwiperSlide key={product.key} style={{ padding: '1rem 1rem' }}>
-              <Link href={`/product/single-product/${product.key}`}>
+          {products.map((product) => (
+            <SwiperSlide key={product.id} style={{ padding: '1rem 1rem' }}>
+              <Link href={`/product/single-product/${product.id}`}>
                 <CardMedia
                   sx={{
-                    height: 350,
+                    height: { xs: 200, md: 250, lg: 350 },
                     boxShadow: '0 0 0 0 violet',
                     transition: 'box-shadow 0.3s',
                     '&:hover': {
                       boxShadow: '0 0 8px 2px violet',
                     },
                   }}
-                  image={product.imageSrc}
-                  title={product.productName}
+                  image={product.productImage}
+                  title={product.name}
                 />
-                <Typography>{product.productName}</Typography>
+                <Typography>{product.name}</Typography>
                 <Box
                   sx={{
                     display: 'flex',
@@ -91,7 +129,7 @@ export default function Banner() {
                     alignItems: 'center',
                   }}
                 >
-                  <Typography>₱{product.productPrice}</Typography>
+                  <Typography>₱{product.price}</Typography>
                   <Box>
                     <IconButton aria-label="heart" color="secondary">
                       <FavoriteBorderOutlinedIcon />

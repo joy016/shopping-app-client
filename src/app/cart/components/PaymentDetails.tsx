@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Box,
   Button,
@@ -9,8 +11,19 @@ import {
 } from '@mui/material';
 import DiscountOutlinedIcon from '@mui/icons-material/DiscountOutlined';
 import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
+import { useAppSelector } from '../../../../store/hooks';
+import { RootState } from '../../../../store/store';
 
 export default function PaymentDetails() {
+  const { subTotal, cartCount, shippingFee, totalAmount } = useAppSelector(
+    (state: RootState) => state.cart
+  );
+
+  const subTotalAmount =
+    cartCount <= 1
+      ? `Sub-total(${cartCount} item)`
+      : `Sub-total(${cartCount} items)`;
+
   return (
     <Box
       sx={{
@@ -44,7 +57,7 @@ export default function PaymentDetails() {
       </Paper>
       <Typography>Order Summary</Typography>
       <Paper
-      elevation={3}
+        elevation={3}
         sx={{
           padding: '1rem',
           borderRadius: '10px',
@@ -52,16 +65,23 @@ export default function PaymentDetails() {
       >
         <Stack spacing={2}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Typography variant="subtitle2">Sub-total (1 item)</Typography>
+            <Typography variant="subtitle2">{subTotalAmount}</Typography>
             <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
-              Php 889.00
+              {`₱ ${subTotal}.00`}
+            </Typography>
+          </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Typography variant="subtitle2">
+              Shipping Fee(1% of subtotal)
+            </Typography>
+            <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
+              {`₱ ${shippingFee}.00`}
             </Typography>
           </Box>
 
-          <Typography>Shipping</Typography>
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Typography variant='h6'>Total</Typography>
-            <Typography variant="h6">Php 889.00</Typography>
+            <Typography variant="h6">Total</Typography>
+            <Typography variant="h6">{`Php ${totalAmount}.00`}</Typography>
           </Box>
 
           <Button variant="contained" color="secondary">

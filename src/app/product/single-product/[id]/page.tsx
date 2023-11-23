@@ -14,24 +14,21 @@ import {
 } from '../../../../../constants/product';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { useAppDispatch, useAppSelector } from '../../../../../store/hooks';
+import {
+  fetchSingleProduct,
+  productSelector,
+} from '../../../../../store/slices/productSlice';
 
-interface Product {
-  key?: string;
-  imageSrc?: string;
-  productName?: string;
-  productPrice?: string;
-}
+export default function Page({ params }: { params: { id: number } }) {
+  const dispatch = useAppDispatch();
+  const products = useAppSelector((state) =>
+    productSelector.selectById(state, params.id)
+  );
 
-export default function Page({ params }: { params: { key: string } }) {
-  const [filteredProduct, setFilteredProduct] = useState<Product>();
-  const key = params.key;
   useEffect(() => {
-    const foundProduct = HIGHLIGHTS_PRODUCT.find(
-      (product) => product.key === params.key
-    );
-
-    setFilteredProduct(foundProduct!);
-  }, [key]);
+    dispatch(fetchSingleProduct(params.id));
+  }, [params.id]);
 
   return (
     <div className="pageContainer">
@@ -39,13 +36,23 @@ export default function Page({ params }: { params: { key: string } }) {
         maxWidth="md"
         sx={{
           display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
           gap: '2rem',
           flexDirection: { xs: 'column', md: 'row' },
+          marginTop: '3rem',
         }}
       >
-        <Box sx={{ width: { xs: '50%', md: '50%' }, padding: '10px' }}>
+        <Box
+          sx={{
+            width: { xs: '100%', md: '50%' },
+            padding: { lg: '10px' },
+            display: 'flex',
+          }}
+        >
           <Image
-            src={filteredProduct?.imageSrc!}
+            style={{ margin: '0 auto' }}
+            src={products!.productImage}
             width={400}
             height={500}
             alt="Picture of the author"
@@ -54,12 +61,8 @@ export default function Page({ params }: { params: { key: string } }) {
         <Box sx={{ width: { xs: '80%', md: '50%' } }}>
           <Stack spacing={2}>
             <Typography variant="caption">Weekly Picks</Typography>
-            <Typography>{filteredProduct?.productName}</Typography>
-            <Typography variant="caption">
-              Experience ultimate comfort and style with this cozy T-Shirt North
-              America. Made in NA, it's a versatile must-have for everyday wear.
-              Embrace confidence in fashion.
-            </Typography>
+            <Typography>{products!.name}</Typography>
+            <Typography variant="caption">{products?.description}</Typography>
             <Typography>Select Size</Typography>
             <Stack direction="row" spacing={0.5}>
               {PRODUCT_SIZE.map((btn) => (
@@ -86,7 +89,7 @@ export default function Page({ params }: { params: { key: string } }) {
                 </Button>
               ))}
             </Stack>
-            <Typography>₱{filteredProduct?.productPrice}.00</Typography>
+            <Typography>₱{products?.price}.00</Typography>
             <Button variant="contained" color="secondary">
               Add to bag
             </Button>

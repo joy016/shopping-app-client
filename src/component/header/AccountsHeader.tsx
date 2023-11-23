@@ -1,3 +1,5 @@
+'use client';
+
 import {
   IconButton,
   Popper,
@@ -8,6 +10,8 @@ import {
   MenuItem,
 } from '@mui/material';
 
+import { useRouter } from 'next/navigation';
+
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import { useRef, useState } from 'react';
 import { ACCOUNTS_LINK } from '../../../constants/navbar';
@@ -15,6 +19,8 @@ import { ACCOUNTS_LINK } from '../../../constants/navbar';
 export default function AccountsHeader() {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
+  const router = useRouter();
+
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
   };
@@ -38,6 +44,7 @@ export default function AccountsHeader() {
       setOpen(false);
     }
   }
+
   return (
     <div>
       <IconButton
@@ -76,7 +83,9 @@ export default function AccountsHeader() {
                   onKeyDown={handleListKeyDown}
                 >
                   {ACCOUNTS_LINK.map((nav) => (
-                    <MenuItem onClick={handleClose}>{nav.navLabel}</MenuItem>
+                    <MenuItem onClick={() => router.push(nav.link)}>
+                      {nav.navLabel}
+                    </MenuItem>
                   ))}
                 </MenuList>
               </ClickAwayListener>

@@ -13,7 +13,7 @@ export default function MainPage() {
         sx={{
           backgroundColor: '#ddbbcc',
           width: '100%',
-          padding: '6rem 0',
+          padding: { xs: '10rem 0', lg: '6rem 0' },
           display: 'flex',
           flexDirection: 'row',
           justifyContent: 'center',
@@ -30,7 +30,11 @@ export default function MainPage() {
         >
           <Typography
             variant="h2"
-            sx={{ textAlign: 'left', fontWeight: '800' }}
+            sx={{
+              fontSize: { xs: '1.5rem', lg: '2.7rem' },
+              textAlign: { xs: 'center', lg: 'left' },
+              fontWeight: { xs: '800', lg: '800' },
+            }}
           >
             Top
             <span
@@ -48,7 +52,13 @@ export default function MainPage() {
           </Typography>
         </Box>
 
-        <Box sx={{ width: '50%', padding: '1rem' }}>
+        <Box
+          sx={{
+            display: { xs: 'none', lg: 'block' },
+            width: '50%',
+            padding: '1rem',
+          }}
+        >
           <Image
             style={{
               position: 'absolute',

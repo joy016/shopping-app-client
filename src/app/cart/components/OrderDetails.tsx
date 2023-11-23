@@ -1,3 +1,4 @@
+'use client';
 import {
   Box,
   Button,
@@ -13,8 +14,26 @@ import RemoveOutlinedIcon from '@mui/icons-material/RemoveOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
+import { RootState } from '../../../../store/store';
+import {
+  addSingleItemTocart,
+  clearItem,
+  removeSingleItem,
+} from '../../../../store/slices/cartSlice';
 
 export default function OrderDetails() {
+  const { cartCount, itemInCart } = useAppSelector(
+    (state: RootState) => state.cart
+  );
+
+  const dispatch = useAppDispatch();
+
+  const totalIteminBag =
+    cartCount <= 1
+      ? `Shopping bag(${cartCount} item)`
+      : `Shopping bag(${cartCount} items)`;
+
   return (
     <Box
       sx={{
@@ -24,7 +43,7 @@ export default function OrderDetails() {
         padding: '2rem 0',
       }}
     >
-      <Typography>My Bag(1)</Typography>
+      <Typography>My Bag({cartCount})</Typography>
       <Paper elevation={3} sx={{ padding: '20px 15px', borderRadius: '15px' }}>
         <Typography sx={{ display: 'flex', alignItems: 'center' }}>
           <span>
@@ -48,83 +67,56 @@ export default function OrderDetails() {
           gap: '1rem',
         }}
       >
-        <Typography>Shopping bag (2 items)</Typography>
-        <Paper
-          elevation={3}
-          sx={{
-            padding: '1rem',
-            borderRadius: '10px ',
-            display: 'flex',
-            gap: '20px',
-          }}
-        >
-          <Image
-            src="/images/latest/banner1.webp"
-            width={150}
-            height={150}
-            alt={''}
-          />
-          <Stack>
-            <Typography>Nike</Typography>
-            <Typography>Usa Men's T-shirt</Typography>
-            <Stack
-              direction="row"
-              sx={{ display: 'flex', alignItems: 'center' }}
-            >
-              <IconButton aria-label="remove" color="error">
-                <RemoveOutlinedIcon />
-              </IconButton>
-              <Typography>1</Typography>
-              <IconButton aria-label="add" color="secondary">
-                <AddOutlinedIcon />
-              </IconButton>
+        <Typography>{totalIteminBag}</Typography>
+        {itemInCart.map((item) => (
+          <Paper
+            elevation={3}
+            sx={{
+              padding: '1rem',
+              borderRadius: '10px ',
+              display: 'flex',
+              gap: '20px',
+            }}
+          >
+            <Image src={item.productImage} width={150} height={150} alt={''} />
+            <Stack>
+              <Typography>{item.name}</Typography>
+              <Typography>Usa Men's T-shirt</Typography>
+              <Stack
+                direction="row"
+                sx={{ display: 'flex', alignItems: 'center' }}
+              >
+                <IconButton
+                  aria-label="remove"
+                  color="error"
+                  onClick={() => dispatch(removeSingleItem(item))}
+                >
+                  <RemoveOutlinedIcon />
+                </IconButton>
+                <Typography>{item.qty}</Typography>
+                <IconButton
+                  aria-label="add"
+                  color="secondary"
+                  onClick={() => dispatch(addSingleItemTocart(item))}
+                >
+                  <AddOutlinedIcon />
+                </IconButton>
+              </Stack>
             </Stack>
-          </Stack>
-          <Stack sx={{ marginLeft: 'auto' }}>
-            <IconButton aria-label="close" color="secondary">
-              <CloseOutlinedIcon />
-            </IconButton>
-            <Typography>₱450.00</Typography>
-          </Stack>
-        </Paper>
-        <Paper
-          elevation={3}
-          sx={{
-            padding: '1rem',
-            borderRadius: '10px ',
-            display: 'flex',
-            gap: '20px',
-          }}
-        >
-          <Image
-            src="/images/latest/banner1.webp"
-            width={150}
-            height={150}
-            alt={''}
-          />
-          <Stack>
-            <Typography>Nike</Typography>
-            <Typography>Usa Men's T-shirt</Typography>
-            <Stack
-              direction="row"
-              sx={{ display: 'flex', alignItems: 'center' }}
-            >
-              <IconButton aria-label="remove" color="error">
-                <RemoveOutlinedIcon />
+            <Stack sx={{ marginLeft: 'auto' }}>
+              <IconButton
+                aria-label="close"
+                color="secondary"
+                onClick={() => dispatch(clearItem(item))}
+              >
+                <CloseOutlinedIcon />
               </IconButton>
-              <Typography>1</Typography>
-              <IconButton aria-label="add" color="secondary">
-                <AddOutlinedIcon />
-              </IconButton>
+              <Typography>
+                {item.amount ? `₱${item.amount}.00` : `₱${item.price}.00`}
+              </Typography>
             </Stack>
-          </Stack>
-          <Stack sx={{ marginLeft: 'auto' }}>
-            <IconButton aria-label="close" color="secondary">
-              <CloseOutlinedIcon />
-            </IconButton>
-            <Typography>₱450.00</Typography>
-          </Stack>
-        </Paper>
+          </Paper>
+        ))}
       </Box>
     </Box>
   );

@@ -1,6 +1,7 @@
 import { Box, Container, Typography } from '@mui/material';
 import MainPage from './components/MainPage';
 import Banner from './components/Banner';
+import Testimonials from './components/Testimonials';
 
 export default function HomePage() {
   return (
@@ -11,6 +12,9 @@ export default function HomePage() {
       <section>
         <Banner />
       </section>
+      {/* <section>
+        <Testimonials />
+      </section> */}
     </div>
   );
 }

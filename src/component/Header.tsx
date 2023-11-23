@@ -70,7 +70,8 @@ export default function Header(props: Props) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-  const counterCart = useAppSelector((state) => state.products.counterCart);
+  const counterCart = useAppSelector((state) => state.cart.cartCount);
+  
   return (
     <>
       <CssBaseline />

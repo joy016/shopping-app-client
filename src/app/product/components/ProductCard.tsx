@@ -8,10 +8,10 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { addToCart } from '../../../../store/slices/productSlice';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import { useAppDispatch } from '../../../../store/hooks';
+import { addCart } from '../../../../store/slices/cartSlice';
 
 interface Props {
   products: Product[];
@@ -25,7 +25,7 @@ export default function ProductCard({ products }: Props) {
         <Grid item xs={6} sm={4} md={6} lg={4} key={product.id}>
           <Box
             sx={{
-              width: { xs: '10rem', sm: '10rem', md: '16rem' },
+              width: { xs: '10rem', sm: '10rem', md: '11rem' },
               margin: '0 auto',
             }}
           >
@@ -35,14 +35,14 @@ export default function ProductCard({ products }: Props) {
             >
               <CardMedia
                 sx={{
-                  height: { xs: 150, sm: 200, lg: 350 },
+                  height: { xs: 150, sm: 200, lg: 150 },
                   boxShadow: '0 0 0 0 violet',
                   transition: 'box-shadow 0.3s',
                   '&:hover': {
                     boxShadow: '0 0 8px 2px violet',
                   },
                 }}
-                image="/images/latest/banner1.webp"
+                image={product.productImage}
                 title={product.name}
               />
 
@@ -67,7 +67,7 @@ export default function ProductCard({ products }: Props) {
                 <IconButton
                   aria-label="cart"
                   color="secondary"
-                  onClick={() => dispatch(addToCart())}
+                  onClick={() => dispatch(addCart(product))}
                 >
                   <ShoppingBagOutlinedIcon />
                 </IconButton>
